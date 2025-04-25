@@ -14,7 +14,7 @@ class View
     {
         extract($data);
         ob_start();
-        $path =  __DIR__ . '/Views/' . $view . '.html';
+        $path =  __DIR__ . '/../Views/' . $view . '.html';
         if (file_exists($path)) {
             include $path;
         }else{
