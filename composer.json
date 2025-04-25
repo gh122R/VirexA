@@ -1,0 +1,14 @@
+{
+    "name": "root/www",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "gh122"
+        }
+    ],
+    "require": {}
+}
