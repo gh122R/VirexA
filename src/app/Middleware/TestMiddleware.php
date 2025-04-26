@@ -11,7 +11,7 @@ class TestMiddleware
     /**
      * Вы можете проверить работоспособность этого middleware' а, раскомментировав код ниже, и убрав последний "return $next();"
      * */
-    public function index(callable $next)
+    public function index(callable $next):callable|string
     {
 /*        if (!empty($_COOKIE['token']))
         {

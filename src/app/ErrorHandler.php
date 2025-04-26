@@ -9,7 +9,7 @@ namespace App;
  * */
 class ErrorHandler
 {
-    public static function error($message): string
+    public static function error(string $message): string
     {
         return View::render('ExceptionsPage', [
             'Exception' => $message

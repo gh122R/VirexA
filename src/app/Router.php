@@ -105,6 +105,10 @@ class Router
     {
         $route = explode('?', $uri)[0];
         $routeData = self::$routes[$route] ?? null;
+        if(!$routeData)
+        {
+            return ErrorHandler::error("Путь $route не найден!");
+        }
         $next = function () use ($routeData, $route)
         {
             if ($routeData !== null && $_SERVER['REQUEST_METHOD'] === $routeData["method"])
@@ -130,10 +134,6 @@ class Router
                   }
               }
           }
-            elseif(!$routeData)
-            {
-                return ErrorHandler::error("Путь $route не найден!");
-            }
             elseif($_SERVER['REQUEST_METHOD'] !== $routeData["method"])
             {
                 return ErrorHandler::error("Данный метод низя применить на маршруте: $route, поскольку запрос страницы {$_SERVER['REQUEST_METHOD']} не совпадает с методом маршрута $routeData[method]!");
