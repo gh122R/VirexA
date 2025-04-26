@@ -103,7 +103,7 @@ class Router
 
     public static function handler(string $uri):mixed
     {
-        $route = explode('?', $uri)[0];
+        $route = parse_url($uri, PHP_URL_PATH);
         $routeData = self::$routes[$route] ?? null;
         if(!$routeData)
         {
