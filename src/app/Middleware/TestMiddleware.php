@@ -3,8 +3,11 @@
 declare(strict_types=1);
 namespace App\Middleware;
 
+use App\ErrorHandler;
+
 class TestMiddleware
 {
+
     /**
      * Вы можете проверить работоспособность этого middleware' а, раскомментировав код ниже, и убрав последний "return $next();"
      * */
@@ -15,7 +18,7 @@ class TestMiddleware
             return $next();
         }else
         {
-            return ErrorHandler::error("Test Middleware успешно выполнен!");
+           return ErrorHandler::error("Middleware сработал!");
         }*/
         return $next();
     }

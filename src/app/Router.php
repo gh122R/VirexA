@@ -11,7 +11,7 @@ class Router
      * Методы для регистрации маршрутов. Они принимают строку с маршрутом, действие, которое будет выполнять вызов функции или контроллера и
      * middleware, который может быть, как функцией, так и массивом.
     */
-    public static function get(string $route, array|callable $action, array|callable $middleware = [])
+    public static function get(string $route, array|callable $action, array|callable $middleware = []): array
     {
         return self::$routes[$route] = [
             'action' => $action,
@@ -20,7 +20,7 @@ class Router
         ];
     }
 
-    public static function post(string $route, array|callable $action, array|callable $middleware = [])
+    public static function post(string $route, array|callable $action, array|callable $middleware = []): array
     {
         return self::$routes[$route] = [
             'action' => $action,
@@ -29,7 +29,7 @@ class Router
         ];
     }
 
-    public static function put(string $route, array|callable $action, array|callable $middleware = [])
+    public static function put(string $route, array|callable $action, array|callable $middleware = []): array
     {
         return self::$routes[$route] = [
             'action' => $action,
@@ -38,7 +38,7 @@ class Router
         ];
     }
 
-    public static function delete(string $route, array|callable $action, array|callable $middleware = [])
+    public static function delete(string $route, array|callable $action, array|callable $middleware = []): array
     {
         return self::$routes[$route] = [
             'action' => $action,
@@ -47,7 +47,7 @@ class Router
         ];
     }
 
-    private static function checkParameters(callable|array $parameters, callable $next)
+    private static function checkParameters(callable|array $parameters, callable $next): mixed
     {
         if (is_callable($parameters))
         {
@@ -58,13 +58,14 @@ class Router
         {
             if (is_array($parameter))
             {
-                [$class, $method, $argument] = $parameter;
-                if (class_exists($class))
+                if (count($parameter) === 3)
                 {
-                    $classInstance = new $class($argument);
-                }else
+                    [$class, $method, $argument] = $parameter;
+                    $classInstance = self::createClassInstance($class, $argument);
+                }elseif(count($parameter) === 2)
                 {
-                    return ErrorHandler::error("Класс $class не найден!");
+                    [$class, $method] = $parameter;
+                    $classInstance = self::createClassInstance($class);
                 }
                 if (method_exists($class, $method))
                 {
@@ -81,6 +82,15 @@ class Router
         return $next();
     }
 
+    private static function createClassInstance(string $class, mixed $argument = null):object|string
+    {
+        if (!class_exists($class))
+        {
+            return ErrorHandler::error("Класс $class не найден!");
+        }
+        return $argument !== null ? new $class($argument) : new $class();
+    }
+
     /**
      *  handler - это обработчик маршрутов. Он берёт полученный адрес и ищет совпадения в массиве $routes, далее
      * проверяет заданный метод(GET,POST,PUT,DELETE) в зарегистрированном маршруте с отправленным методом(GET,POST,PUT,DELETE).
@@ -91,7 +101,7 @@ class Router
      * который проходит по цепочке middleware' ов и в конечном итоге вызывает $next().
     */
 
-    public static function handler(string $uri)
+    public static function handler(string $uri):mixed
     {
         $route = explode('?', $uri)[0];
         $routeData = self::$routes[$route] ?? null;
