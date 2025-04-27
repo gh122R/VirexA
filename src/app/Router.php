@@ -82,7 +82,7 @@ class Router
         return $next();
     }
 
-    private static function createClassInstance(string $class, mixed $argument = null):object|string
+    private static function createClassInstance(string $class, mixed $argument = null): object|string
     {
         if (!class_exists($class))
         {
@@ -96,7 +96,7 @@ class Router
      * проверяет заданный метод(GET,POST,PUT,DELETE) в зарегистрированном маршруте с отправленным методом(GET,POST,PUT,DELETE).
      * Если всё окей, то создаём экземпляр переданного контроллера и обращаемся к его методу, указанному при регистрации маршрута.
      * Если вместо контроллера передана функция, то вызываем её.
-     * Всё это происходит при вызове анонимной функции $next(), но мы не вызываем её здесь сразу на прямую, почему?
+     * Всё это происходит при вызове замыкания $next(), но мы не вызываем её здесь сразу на прямую, почему?
      * Это сделано для проверки заданных middleware'ов, вместо $next() мы возвращаем вызов метода checkParameters,
      * который проходит по цепочке middleware' ов и в конечном итоге вызывает $next().
     */

@@ -22,4 +22,15 @@ class TestMiddleware
         }*/
         return $next();
     }
+
+    public function forTest(callable $next):callable|string
+    {
+        if (!empty($_COOKIE['token']))
+        {
+            return $next();
+        }else
+        {
+           return ErrorHandler::error("Middleware сработал!");
+        }
+    }
 }

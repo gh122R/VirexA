@@ -10,5 +10,7 @@
             "name": "gh122"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "^12.1"
+    }
 }
