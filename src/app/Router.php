@@ -5,55 +5,63 @@ namespace App;
 
 class Router
 {
-    private static array $routes;
+    private array $routes;
+
+    public function __construct()
+    {
+        $this->routes = [];
+    }
 
     /**
      * Методы для регистрации маршрутов. Они принимают строку с маршрутом, действие, которое будет выполнять вызов функции или контроллера и
      * middleware, который может быть, как функцией, так и массивом.
     */
-    public static function get(string $route, array|callable $action, array|callable $middleware = []): array
+    public function get(string $route, array|callable $action, array|callable $middleware = []): self
     {
-        return self::$routes[$route] = [
+        $this->routes[$route] = [
             'action' => $action,
             'method' => 'GET',
             'middlewareList' => $middleware
         ];
+        return $this;
     }
 
-    public static function post(string $route, array|callable $action, array|callable $middleware = []): array
+    public function post(string $route, array|callable $action, array|callable $middleware = []): self
     {
-        return self::$routes[$route] = [
+        $this->routes[$route] = [
             'action' => $action,
             'method' => 'POST',
             'middlewareList' => $middleware
         ];
+        return $this;
     }
 
-    public static function put(string $route, array|callable $action, array|callable $middleware = []): array
+    public function put(string $route, array|callable $action, array|callable $middleware = []): self
     {
-        return self::$routes[$route] = [
+         $this->routes[$route] = [
             'action' => $action,
             'method' => 'PUT',
             'middlewareList' => $middleware
         ];
+         return $this;
     }
 
-    public static function delete(string $route, array|callable $action, array|callable $middleware = []): array
+    public function delete(string $route, array|callable $action, array|callable $middleware = []): self
     {
-        return self::$routes[$route] = [
+        $this->routes[$route] = [
             'action' => $action,
             'method' => 'DELETE',
             'middlewareList' => $middleware
         ];
+        return $this;
     }
 
-    private static function checkParameters(callable|array $parameters, callable $next): mixed
+    private function checkParameters(callable|array $parameters, callable $next): mixed
     {
         if (is_callable($parameters))
         {
             return call_user_func($parameters, $next);
         }
-
         foreach (array_reverse($parameters) as $parameter)
         {
             if (is_array($parameter))
@@ -61,28 +69,31 @@ class Router
                 if (count($parameter) === 3)
                 {
                     [$class, $method, $argument] = $parameter;
-                    $classInstance = self::createClassInstance($class, $argument);
+                    $classInstance = $this->createClassInstance($class, $argument) ?? ErrorHandler::error('Ошибка при создании экземпляра контроллера');
                 }elseif(count($parameter) === 2)
                 {
                     [$class, $method] = $parameter;
-                    $classInstance = self::createClassInstance($class);
+                    $classInstance = $this->createClassInstance($class) ?? ErrorHandler::error('Ошибка при создании экземпляра контроллера');
                 }
-                if (method_exists($class, $method))
+                if (isset($classInstance, $class, $method))
                 {
-                    $next = function () use ($classInstance, $next, $method)
+                    if (method_exists($class, $method))
                     {
-                        return $classInstance->$method($next);
-                    };
-                }else
-                {
-                    return ErrorHandler::error("Метод $method не найден в классе $class!");
+                        $next = function () use ($classInstance, $next, $method)
+                        {
+                            return $classInstance->$method($next);
+                        };
+                    }else
+                    {
+                        return ErrorHandler::error("Метод $method не найден в классе $class!");
+                    }
                 }
             }
         }
         return $next();
     }
 
-    private static function createClassInstance(string $class, mixed $argument = null): object|string
+    private function createClassInstance(string $class, mixed $argument = null): object|string
     {
         if (!class_exists($class))
         {
@@ -101,10 +112,10 @@ class Router
      * который проходит по цепочке middleware' ов и в конечном итоге вызывает $next().
     */
 
-    public static function handler(string $uri):mixed
+    public function handler(string $uri): mixed
     {
         $route = parse_url($uri, PHP_URL_PATH);
-        $routeData = self::$routes[$route] ?? null;
+        $routeData = $this->routes[$route] ?? null;
         if(!$routeData)
         {
             return ErrorHandler::error("Путь $route не найден!");
@@ -115,7 +126,7 @@ class Router
           {
               if (is_callable($routeData["action"]))
               {
-                  return call_user_func($routeData["action"]);
+                   $response =  call_user_func($routeData["action"]);
               }elseif (is_array($routeData["action"]))
               {
                   [$class, $method] = $routeData["action"];
@@ -126,21 +137,17 @@ class Router
                   {
                       return ErrorHandler::error("Контроллер $class не найден!");
                   }
-                  if (method_exists($controller, $method))
-                  {
-                      return call_user_func([$controller, $method]);
-                  }else{
-                      return ErrorHandler::error("Метод $method не найден!");
-                  }
+                  method_exists($controller, $method) ? $response = call_user_func([$controller, $method]) : $response= ErrorHandler::error("Метод $method не найден!");
               }
           }
             elseif($_SERVER['REQUEST_METHOD'] !== $routeData["method"])
             {
                 return ErrorHandler::error("Данный метод низя применить на маршруте: $route, поскольку запрос страницы {$_SERVER['REQUEST_METHOD']} не совпадает с методом маршрута $routeData[method]!");
             }
+            return $response ?? ErrorHandler::error('Произошла ошибка при вызове замыкания 0_0. Виновник - handler роутера!');
         };
 
         $middlewareList = $routeData["middlewareList"] ?? null;
-        return self::checkParameters($middlewareList, $next);
+        return $this->checkParameters($middlewareList, $next);
     }
 }
