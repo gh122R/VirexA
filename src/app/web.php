@@ -12,7 +12,7 @@ use App\Router;
  * Ниже есть примеры объявления маршрутов.
  * ВАЖНО! Учтите, что middleware' ы обрабатываются в обратном порядке и в конце вызывают контроллер.
  * Например, вы задали Controller, Middleware1, Middleware2, их вызов произойдет так:
- * Middleware2 -> Middleware1 -> Controller :D;
+ * Middleware2 -> Middleware1 -> Controller :D
  * */
 $router = new Router();
 
