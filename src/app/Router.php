@@ -3,6 +3,8 @@
 declare(strict_types = 1);
 namespace App;
 
+use App\Helpers\ErrorHandler;
+
 class Router
 {
     private array $routes;
@@ -69,13 +71,13 @@ class Router
                 if (count($parameter) === 3)
                 {
                     [$class, $method, $argument] = $parameter;
-                    $classInstance = $this->createClassInstance($class, $argument) ?? ErrorHandler::error('Ошибка при создании экземпляра контроллера');
+                    $classInstance = $this->createClassInstance($class, $argument) ?? ErrorHandler::brokenClassInstance($class);
                 }elseif(count($parameter) === 2)
                 {
                     [$class, $method] = $parameter;
-                    $classInstance = $this->createClassInstance($class) ?? ErrorHandler::error('Ошибка при создании экземпляра контроллера');
+                    $classInstance = $this->createClassInstance($class) ?? ErrorHandler::brokenClassInstance($class);
                 }
-                if (isset($classInstance, $class, $method))
+                if (isset($classInstance, $class, $method) && is_object($classInstance))
                 {
                     if (method_exists($class, $method))
                     {
@@ -85,8 +87,11 @@ class Router
                         };
                     }else
                     {
-                        return ErrorHandler::error("Метод $method не найден в классе $class!");
+                        return ErrorHandler::methodNotFound($method, $class);
                     }
+                }else
+                {
+                    return $classInstance ?? null;
                 }
             }
         }
@@ -95,11 +100,13 @@ class Router
 
     private function createClassInstance(string $class, mixed $argument = null): object|string
     {
-        if (!class_exists($class))
+        if (class_exists($class))
         {
-            return ErrorHandler::error("Класс $class не найден!");
+            return $argument !== null ? new $class($argument) : new $class();
+        }else
+        {
+            return ErrorHandler::classNotFound($class);
         }
-        return $argument !== null ? new $class($argument) : new $class();
     }
 
     /**
@@ -118,7 +125,7 @@ class Router
         $routeData = $this->routes[$route] ?? null;
         if(!$routeData)
         {
-            return ErrorHandler::error("Путь $route не найден!");
+            return ErrorHandler::routeNotFound($route);
         }
         $next = function () use ($routeData, $route)
         {
@@ -135,16 +142,16 @@ class Router
                       $controller = new $class();
                   }else
                   {
-                      return ErrorHandler::error("Контроллер $class не найден!");
+                      return ErrorHandler::controllerNotFound($class);
                   }
-                  method_exists($controller, $method) ? $response = call_user_func([$controller, $method]) : $response= ErrorHandler::error("Метод $method не найден!");
+                  method_exists($controller, $method) ? $response = call_user_func([$controller, $method]) : $response= ErrorHandler::methodNotFound($method, $class);
               }
           }
             elseif($_SERVER['REQUEST_METHOD'] !== $routeData["method"])
             {
-                return ErrorHandler::error("Данный метод низя применить на маршруте: $route, поскольку запрос страницы {$_SERVER['REQUEST_METHOD']} не совпадает с методом маршрута $routeData[method]!");
+                return ErrorHandler::failedRequestMethod($route, $routeData["method"], $_SERVER['REQUEST_METHOD']);
             }
-            return $response ?? ErrorHandler::error('Произошла ошибка при вызове замыкания 0_0. Виновник - handler роутера!');
+            return $response ?? ErrorHandler::failedHandlerResponse();
         };
 
         $middlewareList = $routeData["middlewareList"] ?? null;

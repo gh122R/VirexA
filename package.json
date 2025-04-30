@@ -1,0 +1,22 @@
+{
+  "name": "www",
+  "version": "1.0.0",
+  "description": "Это простенький роутер, написанный на php. Он умеет обрабатывать middleware'ы и различать post,get,put,delete HTTP - методы. При его создании,я хотел максимально приблизить его к роутеру на laravel.    В коде есть подробные DocBlock комментарии для быстрого освоения.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tailwindcss -i src/css/tailwind.css -o public/css/tailwind.css --watch",
+    "build": "tailwindcss -i src/css/tailwind.css -o public/css/tailwind.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.1"
+  }
+}

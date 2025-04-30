@@ -3,7 +3,7 @@
 declare(strict_types=1);
 namespace App\Middleware;
 
-use App\ErrorHandler;
+use App\Helpers\ErrorHandler;
 
 class TestMiddleware
 {

@@ -1,14 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/tailwind.css">
     <title>Ошибка!</title>
 </head>
-<body>
-<h1>Критическая ошибка</h1>
-<p><?=  $Exception  ?></p>
+<body class="h-full">
+<main class="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
+    <div class="text-center">
+        <p class="text-xl font-semibold text-indigo-600"><?= $DangerLevel ?></p>
+        <h1 class="mt-4 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-4xl"><p><?=  $Exception  ?></p></h1>
+        <p class="mt-6 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8"><?= $Description ?></p>
+        <div class="mt-10 flex items-center justify-center gap-x-6">
+            <a href="https://github.com/gh122R/phpRouter/blob/main/README.md#%D0%BD%D0%B0%D1%87%D0%B0%D0%BB%D0%BE-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B" class="text-sm font-semibold text-gray-900">Перейти в readme <span aria-hidden="true">&rarr;</span></a>
+        </div>
+    </div>
+</main>
 </body>
 </html>

@@ -23,7 +23,7 @@ class RouterTest extends TestCase
         });
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $result = $router->handler('/somethingElse');
-        $this->assertStringContainsString('Путь /somethingElse не найден', $result);
+        $this->assertStringContainsString('404', $result);
     }
 
     public function testGetRequest()
