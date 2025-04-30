@@ -129,3 +129,6 @@ $router->get('/test5', [HomeController::class, 'index'],function (){
     return 'Hello World'; //Hello World выведется на страничку, также, для вывода на страничку, вы можете использовать echo
 });
 ```
+
+[Пример работы роутера](https://github.com/user-attachments/assets/fc83373d-14ff-432a-927f-cba0776bf9cb)
+
