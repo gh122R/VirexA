@@ -130,5 +130,5 @@ $router->get('/test5', [HomeController::class, 'index'],function (){
 });
 ```
 
-[Пример работы роутера](https://github.com/user-attachments/assets/fc83373d-14ff-432a-927f-cba0776bf9cb)
+![Пример работы роутера](https://github.com/user-attachments/assets/fc83373d-14ff-432a-927f-cba0776bf9cb)
 
