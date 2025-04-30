@@ -20,42 +20,35 @@ class Router
     */
     public function get(string $route, array|callable $action, array|callable $middleware = []): self
     {
-        $this->routes[$route] = [
-            'action' => $action,
-            'method' => 'GET',
-            'middlewareList' => $middleware
-        ];
+        $this->registerRoute($route, $action, 'GET', $middleware);
         return $this;
     }
 
     public function post(string $route, array|callable $action, array|callable $middleware = []): self
     {
-        $this->routes[$route] = [
-            'action' => $action,
-            'method' => 'POST',
-            'middlewareList' => $middleware
-        ];
+        $this->registerRoute($route, $action, 'POST', $middleware);
         return $this;
     }
 
     public function put(string $route, array|callable $action, array|callable $middleware = []): self
     {
-         $this->routes[$route] = [
-            'action' => $action,
-            'method' => 'PUT',
-            'middlewareList' => $middleware
-        ];
+        $this->registerRoute($route, $action, 'PUT', $middleware);
          return $this;
     }
 
     public function delete(string $route, array|callable $action, array|callable $middleware = []): self
     {
+        $this->registerRoute($route, $action, 'DELETE', $middleware);
+        return $this;
+    }
+
+    private function registerRoute(string $route, array|callable $action ,string $method, array|callable $middleware = []): void
+    {
         $this->routes[$route] = [
             'action' => $action,
-            'method' => 'DELETE',
+            'method' => $method,
             'middlewareList' => $middleware
         ];
-        return $this;
     }
 
     private function checkParameters(callable|array $parameters, callable $next): mixed
