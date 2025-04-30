@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\HomeController;
+use App\Helpers\ErrorHandler;
 use App\Middleware\TestMiddleware;
 use App\Router;
 /**
@@ -15,10 +16,9 @@ use App\Router;
  * Middleware2 -> Middleware1 -> Controller :D
  * */
 $router = new Router();
-
 $router->get('/', [HomeController::class, 'index'])
        ->get('/test', [HomeController::class, 'index'], [
-           [TestMiddleware::class, 'forTest']
+           [TestMiddleware::class, 'index'],
        ])
        ->get('/test2', [HomeController::class, 'index'], [
            [TestMiddleware::class, 'index'],

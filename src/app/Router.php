@@ -93,6 +93,9 @@ class Router
                 {
                     return $classInstance ?? null;
                 }
+            }elseif(is_callable($parameter))
+            {
+                return call_user_func($parameter, $next);
             }
         }
         return $next();
