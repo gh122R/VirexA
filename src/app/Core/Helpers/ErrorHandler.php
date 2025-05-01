@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace App\Helpers;
+namespace App\Core\Helpers;
 
 /**
  * Это обработчик ошибок. Он использует метод render класса View, обращаясь, по умолчанию, к ExceptionsPage.html.

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Core\Helpers;
 
 class View
 {
@@ -14,13 +14,14 @@ class View
     {
         extract($data);
         ob_start();
-        $path =  __DIR__ . '/../../Views/' . $view . '.html';
+        $path =  dirname(__DIR__, 4) . '/src/Views/' . $view . '.html';
+
         if (file_exists($path))
         {
             include $path;
-        }elseif (file_exists(__DIR__ . '/../../Views/' . $view . '.php'))
+        }elseif (file_exists(dirname(__DIR__, 4) . '/src/Views/' . $view . '.php'))
         {
-            include __DIR__ . '/../../Views/' . $view . '.php';
+            include dirname(__DIR__, 4) . '/src/Views/' . $view . '.html';
         }else
         {
             return ErrorHandler::error("Файл представления не найден :(", description: "$view.html\(php) не найден");

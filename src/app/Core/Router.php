@@ -1,9 +1,9 @@
 <?php
 
 declare(strict_types = 1);
-namespace App;
+namespace App\Core;
 
-use App\Helpers\ErrorHandler;
+use App\Core\Helpers\ErrorHandler;
 
 class Router
 {

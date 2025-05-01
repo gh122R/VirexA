@@ -1,9 +1,11 @@
 <?php
 
-use App\Controllers\HomeController;
-use App\Helpers\View;
-use App\Middleware\TestMiddleware;
-use App\Router;
+use App\Core\Helpers\ErrorHandler;
+use App\Core\Helpers\View;
+use App\Core\Router;
+use src\Controllers\HomeController;
+use src\Middleware\TestMiddleware;
+
 /**
  * Чтобы создать маршрут, достаточно указать путь и массив, состоящий из контроллера и его метода.
  * Так же можно указать middleware, который может быть, как callback' ом, так и массивом из middleware' ов.
@@ -16,16 +18,18 @@ use App\Router;
  * Middleware2 -> Middleware1 -> Controller :D
  * */
 $router = new Router();
+
 $router->get('/', function () {
            return View::render('welcome');
        })
+    ->get('/noneDoc', function () {
+        return ErrorHandler::error('Документации пока нет :(', dangerLevel: "Не ошибка, но тоже плохо", description: "Скоро будет");
+    })
     ->get('/home', [HomeController::class, 'index'])
     ->get('/home/{id}', [HomeController::class, 'index'])
-
     ->get('/test', [HomeController::class, 'index'], [
         [TestMiddleware::class, 'index'],
     ])
-
     ->get('/test2', [HomeController::class, 'index'], [
            [TestMiddleware::class, 'index'],
            [TestMiddleware::class, 'forTest']

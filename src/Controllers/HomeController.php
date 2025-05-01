@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace src\Controllers;
 
-use App\Helpers\View;
-use App\Models\User;
+use App\Core\Helpers\View;
 
 class HomeController
 {

@@ -7,8 +7,8 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
-require_once dirname(__DIR__) . '/src/config.php';
-require_once dirname(__DIR__) . '/src/app/web.php';
+require_once dirname(__DIR__) . '/src/app/config.php';
+require_once dirname(__DIR__) . '/src/web.php';
 
 header("Cross-Origin-Opener-Policy: same-origin-allow-popups");
 header("Cross-Origin-Embedder-Policy: credentialless");

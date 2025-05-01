@@ -2,9 +2,9 @@
 
 namespace tests;
 
-use App\Middleware\TestMiddleware;
+use App\Core\Router;
 use PHPUnit\Framework\TestCase;
-use App\Router;
+use src\Middleware\TestMiddleware;
 
 class RouterTest extends TestCase
 {

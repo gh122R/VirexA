@@ -1,9 +1,9 @@
 <?php
 
 declare(strict_types=1);
-namespace App\Middleware;
 
-use App\Helpers\ErrorHandler;
+namespace src\Middleware;
+use App\Core\Helpers\ErrorHandler;
 
 class TestMiddleware
 {
