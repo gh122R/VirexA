@@ -8,10 +8,12 @@ use App\Helpers\ErrorHandler;
 class Router
 {
     private array $routes;
+    private array $dinamicRoutes;
 
     public function __construct()
     {
         $this->routes = [];
+        $this->dinamicRoutes = [];
     }
 
     /**
@@ -44,18 +46,32 @@ class Router
 
     private function registerRoute(string $route, array|callable $action ,string $method, array|callable $middleware = []): void
     {
-        $this->routes[$route] = [
-            'action' => $action,
-            'method' => $method,
-            'middlewareList' => $middleware
-        ];
+        if (str_contains($route, '{'))
+        {
+            $pattern = "#^" . preg_replace('#\{(\w+)\}#', '(\w+)', $route) . "$#";
+            preg_match_all('/\{(\w+)\}/', $route, $matches);
+            $this->dinamicRoutes[$route] = [
+                'action' => $action,
+                'method' => $method,
+                'middlewareList' => $middleware,
+                'matches' => $matches[1],
+                'pattern'=> $pattern
+            ];
+        }else
+        {
+            $this->routes[$route] = [
+                'action' => $action,
+                'method' => $method,
+                'middlewareList' => $middleware
+            ];
+        }
     }
 
     private function checkParameters(callable|array $parameters, callable $next): mixed
     {
         if (is_callable($parameters))
         {
-            return call_user_func($parameters, $next);
+            $parameters = [$parameters];
         }
         foreach (array_reverse($parameters) as $parameter)
         {
@@ -88,7 +104,10 @@ class Router
                 }
             }elseif(is_callable($parameter))
             {
-                return call_user_func($parameter, $next);
+                $next = function () use ($parameter, $next)
+                {
+                    return $parameter($next);
+                };
             }
         }
         return $next();
@@ -119,11 +138,25 @@ class Router
     {
         $route = parse_url($uri, PHP_URL_PATH);
         $routeData = $this->routes[$route] ?? null;
+        $parameters = null;
         if(!$routeData)
         {
-            return ErrorHandler::routeNotFound($route);
+            foreach ($this->dinamicRoutes as $matchRoute => $data)
+            {
+                if(preg_match($data['pattern'], $route, $matches))
+                {
+                    array_shift($matches);
+                    $parameters = array_combine($data['matches'], $matches);
+                    $routeData = $data;
+                    break;
+                }
+            }
+            if(!$routeData)
+            {
+                return ErrorHandler::routeNotFound($route);
+            }
         }
-        $next = function () use ($routeData, $route)
+        $next = function () use ($routeData, $route, $parameters)
         {
             if ($routeData !== null && $_SERVER['REQUEST_METHOD'] === $routeData["method"])
           {
@@ -133,14 +166,14 @@ class Router
               }elseif (is_array($routeData["action"]))
               {
                   [$class, $method] = $routeData["action"];
-                  if(class_exists($class))
-                  {
-                      $controller = new $class();
-                  }else
+                  $parameters !== null ? $controller = $this->createClassInstance($class, $parameters) : $controller = $this->createClassInstance($class);
+                  if (!is_object($controller))
                   {
                       return ErrorHandler::controllerNotFound($class);
+                  }else
+                  {
+                      method_exists($controller, $method) ? $response = call_user_func([$controller, $method]) : $response= ErrorHandler::methodNotFound($method, $class);
                   }
-                  method_exists($controller, $method) ? $response = call_user_func([$controller, $method]) : $response= ErrorHandler::methodNotFound($method, $class);
               }
           }
             elseif($_SERVER['REQUEST_METHOD'] !== $routeData["method"])

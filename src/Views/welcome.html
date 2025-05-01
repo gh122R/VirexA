@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirexA</title>
+    <link rel="stylesheet" href="/css/tailwind.css">
+</head>
+<body class="bg-gray-50 text-gray-800">
+<div class="flex min-h-screen flex-col items-center justify-center px-4">
+    <h1 class="text-5xl font-bold text-indigo-700">Добро пожаловать в VirexA 🤠</h1>
+    <p class="mt-4 text-lg text-gray-600 text-center max-w-xl">
+        Virtual Router Express Axis — минималистичный роутер на PHP для быстрых, гибких и мощных веб-приложений.
+    </p>
+
+    <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl w-full">
+        <div class="p-6 bg-white shadow rounded-2xl">
+            <h2 class="text-xl font-semibold">Удобная маршрутизация</h2>
+            <p class="mt-2 text-gray-600">Простое объявление маршрутов.</p>
+        </div>
+        <div class="p-6 bg-white shadow rounded-2xl">
+            <h2 class="text-xl font-semibold">Middleware и группы</h2>
+            <p class="mt-2 text-gray-600">Поддержка middleware и групп маршрутов для контроля доступа и логики.</p>
+        </div>
+        <div class="p-6 bg-white shadow rounded-2xl">
+            <h2 class="text-xl font-semibold">Контроллеры и MVC</h2>
+            <p class="mt-2 text-gray-600">Структура контроллеров, разделение логики, упрощённый MVC подход.</p>
+        </div>
+        <div class="p-6 bg-white shadow rounded-2xl">
+            <h2 class="text-xl font-semibold">Tailwind CSS готов</h2>
+            <p class="mt-2 text-gray-600">Стилизация страниц сразу из коробки. Легко настраивается и расширяется.</p>
+        </div>
+    </div>
+
+    <a href="/test1" class="mt-5 inline-block px-3 py-2 bg-indigo-600 text-white rounded-xl text-md hover:bg-indigo-700 transition">
+        Перейти к документации →
+    </a>
+    <pre class="mt-10 bg-gray-900 text-white p-4 rounded-xl text-sm w-full max-w-4xl overflow-x-auto">
+        <span class="text-gray-400">Пример маршрута</span>
+        <span class="text-green-400">$router</span><span class="text-white">-></span><span class="text-blue-400">get</span><span class="text-white">(</span><span class="text-yellow-300">'/'</span><span class="text-white">, [</span><span class="text-blue-300">HomeController::class</span><span class="text-white">, </span><span class="text-yellow-300">'index'</span><span class="text-white">]);</span>
+    </pre>
+</div>
+</body>
+</html>

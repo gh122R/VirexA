@@ -18,9 +18,12 @@ class View
         if (file_exists($path))
         {
             include $path;
+        }elseif (file_exists(__DIR__ . '/../../Views/' . $view . '.php'))
+        {
+            include __DIR__ . '/../../Views/' . $view . '.php';
         }else
         {
-            exit();
+            return ErrorHandler::error("Файл представления не найден :(", description: "$view.html\(php) не найден");
         }
         return ob_get_clean();
     }

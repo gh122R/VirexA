@@ -1,7 +1,7 @@
 <?php
 
 use App\Controllers\HomeController;
-use App\Helpers\ErrorHandler;
+use App\Helpers\View;
 use App\Middleware\TestMiddleware;
 use App\Router;
 /**
@@ -16,11 +16,17 @@ use App\Router;
  * Middleware2 -> Middleware1 -> Controller :D
  * */
 $router = new Router();
-$router->get('/', [HomeController::class, 'index'])
-       ->get('/test', [HomeController::class, 'index'], [
+$router->get('/', function () {
+           return View::render('welcome');
+       })
+    ->get('/home', [HomeController::class, 'index'])
+    ->get('/home/{id}', [HomeController::class, 'index'])
+
+    ->get('/test', [HomeController::class, 'index'], [
+        [TestMiddleware::class, 'index'],
+    ])
+
+    ->get('/test2', [HomeController::class, 'index'], [
            [TestMiddleware::class, 'index'],
-       ])
-       ->get('/test2', [HomeController::class, 'index'], [
-           [TestMiddleware::class, 'index'],
-           [TestMiddleware::class, 'empty']
+           [TestMiddleware::class, 'forTest']
        ]);

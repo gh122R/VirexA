@@ -12,5 +12,8 @@
     ],
     "require-dev": {
         "phpunit/phpunit": "^12.1"
+    },
+    "require": {
+        "illuminate/database": "^12.11"
     }
 }
