@@ -1,5 +1,5 @@
 
-# 🧭 VirexA — PHP-роутер на стероидах  
+# 🧭 VirexA — мини php-framework 
 
 ![PHP](https://img.shields.io/badge/PHP-8.4-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
