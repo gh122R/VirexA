@@ -23,9 +23,9 @@ $router->get('/', function () {
            return View::render('welcome');
        })
     ->get('/noneDoc', function () {
-        return ErrorHandler::error('Документации пока нет :(', dangerLevel: "Не ошибка, но тоже плохо", description: "Скоро будет");
+        return ErrorHandler::error('Документации пока нет :(', dangerLevel: "Это не ошибка, а лень разработчика", description: "Скоро будет, поверьте на слово");
     })
-    ->get('/home', [HomeController::class, 'index'])
+    ->get('/home', [HomeController::class, 'ind1ex'])
     ->get('/home/{id}', [HomeController::class, 'index'])
     ->get('/test', [HomeController::class, 'index'], [
         [TestMiddleware::class, 'index'],

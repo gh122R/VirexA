@@ -21,7 +21,7 @@ class View
             include $path;
         }elseif (file_exists(dirname(__DIR__, 4) . '/src/Views/' . $view . '.php'))
         {
-            include dirname(__DIR__, 4) . '/src/Views/' . $view . '.html';
+            include dirname(__DIR__, 4) . '/src/Views/' . $view . '.php';
         }else
         {
             return ErrorHandler::error("Файл представления не найден :(", description: "$view.html\(php) не найден");
