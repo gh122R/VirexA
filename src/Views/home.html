@@ -5,12 +5,21 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/tailwind.css">
     <title>Document</title>
 </head>
-<body>
-<p>There is home page!</p>
-<?php if(isset($id)): ?>
-<?= $id ?>
-<?php endif ?>
+<body class="h-full bg-black">
+<main>
+    <img class="absolute top-0 ml-[20px] mt-5 h-1/5 bg-black" src="/css/logo.svg" alt="">
+    <div class="grid place-items-center text-white px-6 py-24 sm:py-32 lg:px-8">
+        <h1 class="text-2xl mb-4">Это тестовая домашняя страничка :)</h1>
+        <?php if(isset($id)): ?>
+        <p>Переданное значение в динамическом маршруте - <?= $id ?></p>
+        <?php endif ?>
+        <div class="mt-10 flex items-center justify-center gap-x-6">
+            <a href="/" class="text-sm  text-gray-100">Вернуться на welcome страничку <span aria-hidden="true">&rarr;</span></a>
+        </div>
+    </div>
+</main>
 </body>
 </html>

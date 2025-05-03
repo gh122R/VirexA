@@ -1,7 +1,6 @@
 {
   "name": "www",
   "version": "1.0.0",
-  "description": "Это простенький роутер, написанный на php. Он умеет обрабатывать middleware'ы и различать post,get,put,delete HTTP - методы. При его создании,я хотел максимально приблизить его к роутеру на laravel.    В коде есть подробные DocBlock комментарии для быстрого освоения.",
   "main": "index.js",
   "directories": {
     "test": "tests"
