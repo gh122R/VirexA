@@ -4,6 +4,8 @@ namespace tests;
 
 use App\Core\Router;
 use PHPUnit\Framework\TestCase;
+use src\Controllers\HomeController;
+use src\Controllers\TestController;
 use src\Middleware\TestMiddleware;
 
 class RouterTest extends TestCase
@@ -48,26 +50,13 @@ class RouterTest extends TestCase
         $this->assertEquals('success', $result);
     }
 
-    public function testPutRequest()
+    public function testDynamicRoute()
     {
         $router = new Router();
-        $router->put('/test', function () {
-            return 'success';
-        });
-        $_SERVER['REQUEST_METHOD'] = 'PUT';
-        $result = $router->handler('/test');
-        $this->assertEquals('success', $result);
-    }
-
-    public function testDeleteRequest()
-    {
-        $router = new Router();
-        $router->delete('/test', function () {
-            return 'success';
-        });
-        $_SERVER['REQUEST_METHOD'] = 'DELETE';
-        $result = $router->handler('/test');
-        $this->assertEquals('success', $result);
+        $router->get('/test/{id}', [HomeController::class, 'index']);
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $result = $router->handler('/test/123');
+        $this->assertStringContainsString('123', $result);
     }
 
     public function testMixedRequestsPositive()

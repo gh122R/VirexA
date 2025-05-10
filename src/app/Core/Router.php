@@ -32,18 +32,6 @@ class Router
         return $this;
     }
 
-    public function put(string $route, array|callable $action, array|callable $middleware = []): self
-    {
-        $this->registerRoute($route, $action, 'PUT', $middleware);
-         return $this;
-    }
-
-    public function delete(string $route, array|callable $action, array|callable $middleware = []): self
-    {
-        $this->registerRoute($route, $action, 'DELETE', $middleware);
-        return $this;
-    }
-
     private function registerRoute(string $route, array|callable $action ,string $method, array|callable $middleware = []): void
     {
         if (str_contains($route, '{'))
