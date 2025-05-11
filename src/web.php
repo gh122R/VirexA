@@ -19,7 +19,8 @@ use src\Middleware\TestMiddleware;
  * */
 $router = new Router();
 
-$router->get('/', function () {
+$router
+    ->get('/', function () {
            return View::render('welcome');
        })
     ->get('/noneDoc', function () {
